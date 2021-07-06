@@ -18,7 +18,6 @@ class CWAQuicktestData {
     // fields used for both anonymous and personal data transfer
     private $timestamp = null;
     private $salt = null;
-    private $hash = null;
 
     public const PERSONAL_DATA_FIELDS = array( 'fn', 'ln', 'dob', 'testid' );
     
@@ -46,6 +45,16 @@ class CWAQuicktestData {
         }
 
         $this->validateData( $data );
+
+        $this->timestamp = $data['timestamp'];
+        $this->salt = $data['salt'];
+
+        if ( ! $this->isAnononymous ) {
+            $this->fn = $data['fn'];
+            $this->ln = $data['ln'];
+            $this->dob = $data['dob'];
+            $this->testid = $data['testid'];
+        }
     }
 
     /**
@@ -78,6 +87,73 @@ class CWAQuicktestData {
                 }
             }
         }
+    }
+
+    /**
+     * @param bool $includeHash Whether to include the hash in the returned value
+     * 
+     * @return array associative array of the fields and values
+     */
+    public function getData( $includeHash = true ) {
+        // IMPORTANT: key order matters, because these arrays are also imploded to build the data string for hash generation
+        $dataArray = $this->isAnononymous
+            ? array(
+                'timestamp' => $this->timestamp,
+                'salt' => $this->salt
+            )
+            : array(
+                'dob' => $this->dob,
+                'fn' => $this->fn,
+                'ln' => $this->ln,
+                'timestamp' => $this->timestamp,
+                'testid' => $this->testid,
+                'salt' => $this->salt
+            );
+
+        if ( $includeHash ) {
+            $dataArray['hash'] = $this->getHash();
+        }
+
+        return $dataArray;
+    }
+
+    /**
+     * @return object The data from getData() as stdObject
+     */
+    public function getDataObject() {
+        return (object)$this->getData( true );
+    }
+
+    /**
+     * @return string the SHA256 hash of the data
+     */
+    public function getHash() {
+        $dataString = implode( '#', $this->getData( false ) );
+
+        return hash( 'sha256', $dataString );
+    }
+
+    /**
+     * @return string JSON representation of the data, including the hash
+     */
+    public function toJSON() {
+        // in order to use the same representation with no linebreaks but single spaces
+        // as in the CWA documentation for consistency when testing with the dummy data
+        // we could use the following line:
+        // 
+        // return preg_replace( "/\n(( ){4}|(}$))/", " $3", json_encode( $this->getDataObject(), JSON_PRETTY_PRINT ) );
+        // 
+        // however, the examples don't use consistent ordering of the keys in all places,
+        // so we might as well use as little space as necessary
+
+        return json_encode( $this->getDataObject() );
+    }
+
+    /**
+     * @return string base64 encoded JSON representation of the data, as needed for building the URL for the app
+     */
+    public function toJSONBase64() {
+        return base64_encode( $this->toJSON() );
     }
 
 }

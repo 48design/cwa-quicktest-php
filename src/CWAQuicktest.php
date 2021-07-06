@@ -27,9 +27,14 @@ class CWAQuicktest {
     private const STAGE_PRODUCTION = 'https://quicktest-result.coronawarn.app';
 
     /**
-     * @var string API endpoint for setting the results, appende to the stage URL
+     * @var string API endpoint for setting the results, appended to the stage URL
      */
     private const API_ENDPOINT_RESULTS = '/api/v1/quicktest/results';
+
+    /**
+     * @var string base URL for the data exchange with the app
+     */
+    private const APP_BASE_URL = 'https://s.coronawarn.app?v=1';
 
     /**
      * @var string $certFile path to the .cer file as provided via the constructor
@@ -207,6 +212,7 @@ class CWAQuicktest {
      */
     public function getDataURL( $data = array() ) {
         $testObject = new CWAQuicktestData( $data );
-        throw new \Exception( "This method is not implemented yet" );
+
+        return self::APP_BASE_URL . '#' . $testObject->toJSONBase64();
     }
 }

@@ -2,6 +2,7 @@
 namespace FortyeightDesign\CWAQuicktest\Test;
 
 use FortyeightDesign\CWAQuicktest;
+use FortyeightDesign\CWAQuicktestData\Test;
 
 class CWAQuicktestTest extends \PHPUnit\Framework\TestCase
 {
@@ -38,21 +39,21 @@ class CWAQuicktestTest extends \PHPUnit\Framework\TestCase
     }
 
     public function testConstructorSucceeds() {
-        $test = self::getWorkingTestObject();
-        $this->assertTrue(gettype($test) === 'object');
+        $CWAQuicktest = self::getWorkingTestObject();
+        $this->assertTrue(gettype($CWAQuicktest) === 'object');
     }
 
     public function testSendResultsFailingWithEmptyResults() {
-        $test = $this->getWorkingRealObject();
-        $result = $test->sendResults(
+        $CWAQuicktest = $this->getWorkingRealObject();
+        $result = $CWAQuicktest->sendResults(
             array()
         );
         $this->assertEquals( (object)array( 'status' => 400, 'response' => null ), $result );
     }
 
     public function testSendResultsFailingWithInvalidID() {
-        $test = $this->getWorkingRealObject();
-        $result = $test->sendResults(
+        $CWAQuicktest = $this->getWorkingRealObject();
+        $result = $CWAQuicktest->sendResults(
             (object)array(
               "id" => "x",
               "result" => 6,
@@ -64,8 +65,8 @@ class CWAQuicktestTest extends \PHPUnit\Framework\TestCase
     }
 
     public function testSendResultsFailingWithInvalidResultCode() {
-        $test = $this->getWorkingRealObject();
-        $result = $test->sendResults(
+        $CWAQuicktest = $this->getWorkingRealObject();
+        $result = $CWAQuicktest->sendResults(
             (object)array(
               "id" => "484848484852bf4f6c7eca896c0030516ab2f228f157237712e52d66489d996f",
               "result" => 1,
@@ -77,8 +78,8 @@ class CWAQuicktestTest extends \PHPUnit\Framework\TestCase
     }
 
     public function testSendResults() {
-        $test = $this->getWorkingRealObject();
-        $result = $test->sendResults(
+        $CWAQuicktest = $this->getWorkingRealObject();
+        $result = $CWAQuicktest->sendResults(
             array(
                 (object)array(
                   "id" => "484848484852bf4f6c7eca896c0030516ab2f228f157237712e52d66489d996f",
@@ -88,5 +89,21 @@ class CWAQuicktestTest extends \PHPUnit\Framework\TestCase
             )
         );
         $this->assertTrue( $result );
+    }
+
+    public function testGetDataURLAnonymous() {
+        $CWAQuicktest = self::getWorkingTestObject();
+        $this->assertEquals(
+            $CWAQuicktest->getDataURL( CWAQuicktestDataTest::$dummyDataAnonymous ),
+            'https://s.coronawarn.app?v=1#eyJ0aW1lc3RhbXAiOjE2MTgzODY1NDgsInNhbHQiOiI3NTlGOEZGMzU1NEYwRTFCQkY2RUZGOERFMjk4RDlFOSIsImhhc2giOiI4MDIzMjgzODA0NmQyYTY1YWIxYjdhMWJlM2RkMTI1MGJhOWM5MWM5Njk0NzZjMDkzYmMzNDAwMWVmNDYwYWY4In0='
+        );
+    }
+    
+    public function testGetDataURLPersonal() {
+        $CWAQuicktest = self::getWorkingTestObject();
+        $this->assertEquals(
+            $CWAQuicktest->getDataURL( CWAQuicktestDataTest::$dummyDataPersonal ),
+            'https://s.coronawarn.app?v=1#eyJkb2IiOiIxOTkwLTEyLTIzIiwiZm4iOiJFcmlrYSIsImxuIjoiTXVzdGVybWFubiIsInRpbWVzdGFtcCI6MTYxODM4NjU0OCwidGVzdGlkIjoiNTJjZGRkOGUtZmYzMi00NDc4LWFmNjQtY2I4NjdjZWExZGI1Iiwic2FsdCI6Ijc1OUY4RkYzNTU0RjBFMUJCRjZFRkY4REUyOThEOUU5IiwiaGFzaCI6IjY3YTUwY2JhNTk1MmJmNGY2YzdlY2E4OTZjMDAzMDUxNmFiMmYyMjhmMTU3MjM3NzEyZTUyZDY2NDg5ZDk5NjAifQ=='
+        );
     }
 }
