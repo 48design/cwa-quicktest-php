@@ -116,6 +116,28 @@ class CWAQuicktest {
     }
 
     /**
+     * @return string an uppercase 128-bit hex string with a fixed width of 32 chars
+     */
+    public static function getSalt( $width = 32 ) {
+        $byteLength = 16;
+
+        if ( ! function_exists( 'random_bytes' ) && ! function_exists( 'openssl_random_pseudo_bytes' ) ) {
+            throw new \Exception( 'This system does neither support random_bytes() nor openssl_random_pseudo_bytes(), either of which is required to generate a cryptographically random salt' );
+        }
+        
+        $randomBytes = function_exists( 'random_bytes' ) ? random_bytes( $byteLength ) : openssl_random_pseudo_bytes( $byteLength );
+
+        $hexValue = strtoupper( bin2hex( $randomBytes ) );
+
+        // this should never happen, but better be safe than sorry
+        if ( strlen( $hexValue ) !== $width ) {
+            throw new \Exception( 'The generated salt did not have the expected length' );
+        }
+
+        return $hexValue;
+    }
+
+    /**
      * Sends an array of results to the cwa-testresult-server API
      * 
      * @return bool|object boolean true on success, otherwise the JSON decoded response object if available, or an object containing the HTTP status code as property "status" and the response body as property "response"
@@ -183,7 +205,8 @@ class CWAQuicktest {
      * 
      * @return string The URL containing the data needed by the Corona Warn App
      */
-    public function getDataURL( $includePersonalData = false ) {
+    public function getDataURL( $data = array() ) {
+        $testObject = new CWAQuicktestData( $data );
         throw new \Exception( "This method is not implemented yet" );
     }
 }
