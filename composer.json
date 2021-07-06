@@ -1,0 +1,26 @@
+{
+    "name": "48design/cwa-quicktest",
+    "description": "A PHP class that simplifies the integration of the Corona Warn Aapp (CWA; Germany's official Corona virus contact tracing app) by providing the data for QR code generation and handling the communication with the cwa-testresult-server API.",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "48DESIGN GmbHm, Constantin Groß",
+            "email": "info@48design.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {"FortyeightDesign\\": "src/"}
+    },
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=7.3.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.5"
+    },
+    "scripts": {
+        "test": "phpunit",
+        "coverage": "php-coveralls -v"
+    }
+}
