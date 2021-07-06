@@ -2,7 +2,6 @@
 namespace FortyeightDesign\CWAQuicktest\Test;
 
 use FortyeightDesign\CWAQuicktest;
-use FortyeightDesign\CWAQuicktestData\Test;
 
 class CWAQuicktestTest extends \PHPUnit\Framework\TestCase
 {
@@ -103,6 +102,14 @@ class CWAQuicktestTest extends \PHPUnit\Framework\TestCase
         $CWAQuicktest = self::getWorkingTestObject();
         $this->assertEquals(
             $CWAQuicktest->getDataURL( CWAQuicktestDataTest::$dummyDataPersonal ),
+            'https://s.coronawarn.app?v=1#eyJkb2IiOiIxOTkwLTEyLTIzIiwiZm4iOiJFcmlrYSIsImxuIjoiTXVzdGVybWFubiIsInRpbWVzdGFtcCI6MTYxODM4NjU0OCwidGVzdGlkIjoiNTJjZGRkOGUtZmYzMi00NDc4LWFmNjQtY2I4NjdjZWExZGI1Iiwic2FsdCI6Ijc1OUY4RkYzNTU0RjBFMUJCRjZFRkY4REUyOThEOUU5IiwiaGFzaCI6IjY3YTUwY2JhNTk1MmJmNGY2YzdlY2E4OTZjMDAzMDUxNmFiMmYyMjhmMTU3MjM3NzEyZTUyZDY2NDg5ZDk5NjAifQ=='
+        );
+    }
+
+    public function testGetDataURLWithObject() {
+        $CWAQuicktest = self::getWorkingTestObject();
+        $this->assertEquals(
+            $CWAQuicktest->getDataURL( new \FortyeightDesign\CWAQuicktestData( CWAQuicktestDataTest::$dummyDataPersonal ) ),
             'https://s.coronawarn.app?v=1#eyJkb2IiOiIxOTkwLTEyLTIzIiwiZm4iOiJFcmlrYSIsImxuIjoiTXVzdGVybWFubiIsInRpbWVzdGFtcCI6MTYxODM4NjU0OCwidGVzdGlkIjoiNTJjZGRkOGUtZmYzMi00NDc4LWFmNjQtY2I4NjdjZWExZGI1Iiwic2FsdCI6Ijc1OUY4RkYzNTU0RjBFMUJCRjZFRkY4REUyOThEOUU5IiwiaGFzaCI6IjY3YTUwY2JhNTk1MmJmNGY2YzdlY2E4OTZjMDAzMDUxNmFiMmYyMjhmMTU3MjM3NzEyZTUyZDY2NDg5ZDk5NjAifQ=='
         );
     }

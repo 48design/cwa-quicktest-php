@@ -206,12 +206,15 @@ class CWAQuicktest {
     /**
      * Returns the URL for use with a QR code generation library (or for redirecting the user directly to the Corona Warn App in a mobile environment)
      * 
-     * @param boolean $includePersonalData Whether to share personal data together with the test result with the app, or just the test result
+     * @param array|CWAQuicktestData An array or CWAQuicktestData object holding the test data
      * 
      * @return string The URL containing the data needed by the Corona Warn App
      */
     public function getDataURL( $data = array() ) {
-        $testObject = new CWAQuicktestData( $data );
+        $testObject =
+            is_object( $data ) && get_class( $data ) === 'FortyeightDesign\CWAQuicktestData'
+            ? $data
+            : new CWAQuicktestData( $data );
 
         return self::APP_BASE_URL . '#' . $testObject->toJSONBase64();
     }
