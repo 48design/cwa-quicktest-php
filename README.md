@@ -1,5 +1,5 @@
 # cwa-quicktest-php
-A PHP class that simplifies the integration of the [Corona Warn Aapp](https://github.com/corona-warn-app) (CWA; Germany's official Corona virus contact tracing app) by providing the data for QR code generation and handling the communication with the cwa-testresult-server API.
+A PHP class that simplifies the integration of the [Corona Warn App](https://github.com/corona-warn-app) (CWA; Germany's official Corona virus contact tracing app) by providing the data for QR code generation and handling the communication with the cwa-testresult-server API.
 
 ## Installation
 
