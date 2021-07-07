@@ -37,15 +37,15 @@ class CWAQuicktest {
     private const APP_BASE_URL = 'https://s.coronawarn.app?v=1';
 
     /**
-     * @var string $certFile path to the .cer file as provided via the constructor
+     * @var string path to the .cer file as provided via the constructor
      */
     private static $certFile = null;
     /**
-     * @var string $certFile path to the .key file as provided via the constructor
+     * @var string path to the .key file as provided via the constructor
      */
     private static $keyFile = null;
     /**
-     * @var string $certFile passphrase for the .key file as provided via the constructor
+     * @var string passphrase for the .key file as provided via the constructor
      */
     private static $keyPass = null;
 
