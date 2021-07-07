@@ -50,6 +50,19 @@ class CWAQuicktest {
     private static $keyPass = null;
 
     /**
+     * @var int integer status value for a negative test result
+     */
+    public const RESULT_NEGATIVE = 6;
+    /**
+     * @var int integer status value for a positive test result
+     */
+    public const RESULT_POSITIVE = 7;
+    /**
+     * @var int integer status value for an invalid test result
+     */
+    public const RESULT_INVALID = 8;
+
+    /**
      * @var string Which stage to use. Possible values: PRODUCTION|WRU|INT (default: WRU)
      */
     public static $stage = 'WRU';
