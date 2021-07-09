@@ -2,7 +2,7 @@
 namespace FortyeightDesign;
 
 /**
- * Class for creating objets holding the test information and auto-computing the hashes
+ * Class for creating objects holding the test information and auto-computing the hashes
  * 
  * Data format according to https://github.com/corona-warn-app/cwa-quicktest-onboarding/wiki/Anbindung-der-Partnersysteme#erstellung-von-qr-codes-f%C3%BCr-corona-warn-app
  * 

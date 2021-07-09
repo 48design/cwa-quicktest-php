@@ -134,7 +134,9 @@ class CWAQuicktest {
     }
 
     /**
-     * @return string an uppercase 128-bit hex string with a fixed width of 32 chars
+     * @param int $width character count of the resulting string
+     * 
+     * @return string an uppercase 128-bit hex string with a fixed width of 32 (or $width) chars
      */
     public static function getSalt( $width = 32 ) {
         $byteLength = 16;
@@ -157,6 +159,8 @@ class CWAQuicktest {
 
     /**
      * Sends an array of results to the cwa-testresult-server API
+     * 
+     * @param CWAQuicktestResult[] $results an array of one or more CWAQuicktestResult objects
      * 
      * @return bool|object boolean true on success, otherwise the JSON decoded response object if available, or an object containing the HTTP status code as property "status" and the response body as property "response"
      */
