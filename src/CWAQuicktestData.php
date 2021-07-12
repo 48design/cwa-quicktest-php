@@ -63,29 +63,23 @@ class CWAQuicktestData {
      * @param array the same $data array as supplied to the constructor
     */
     private function validateData( $data ) {
-        if ( ! isset( $data['timestamp'] ) ) {
-            throw new \Exception( "Required field 'timestamp' is missing" );
+        // validate that required fields (depending on anonymous or personal transfer) are present
+        foreach ( array_merge( array( 'salt', 'timestamp' ), $this->isAnononymous ? array() : self::PERSONAL_DATA_FIELDS ) as $fieldName ) {
+            if ( ! isset( $data[$fieldName] ) ) {
+                throw new \Exception( sprintf( "Required field '%s' is missing", $fieldName ) );
+            }
         }
 
         if ( ! ( is_int ( $data['timestamp'] ) && $data['timestamp'] > 0 && $data['timestamp'] <= PHP_INT_MAX ) ) {
-            throw new \Exception( "Invalid format for 'timestamp': This should be a unix timestamp" );
+            throw new \Exception( "Invalid format for 'timestamp': This must be a unix timestamp" );
         }
 
-        if ( !isset( $data['salt'] ) ) {
-            throw new \Exception( "Field 'salt' should not be empty" );
+        if ( empty( $data['salt'] ) ) {
+            throw new \Exception( "Field 'salt' must not be empty" );
         }
 
         if ( !preg_match( '/^[ABCDEF0-9]{32}$/', $data['salt'] ) ) {
             throw new \Exception( "Invalid format for 'salt': This must be an uppercase 128-bit hex string with a fixed width of 32 chars" );
-        }
-
-        // validate personal data if not anonymous
-        if ( ! $this->isAnononymous ) {
-            foreach ( self::PERSONAL_DATA_FIELDS as $fieldName ) {
-                if ( empty( $data[$fieldName] ) ) {
-                    throw new \Exception( sprintf( "Field '%s' should not be empty", $fieldName ) );
-                }
-            }
         }
     }
 
