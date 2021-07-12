@@ -19,6 +19,36 @@ class CWAQuicktestDataTest extends \PHPUnit\Framework\TestCase
         'salt' => '759F8FF3554F0E1BBF6EFF8DE298D9E9'
     );
 
+    public function testConstructorMissingSalt() {
+        $this->expectExceptionMessageMatches("/^Required field 'salt' is missing$/");
+        new CWAQuicktestData( array(
+        ) );
+    }
+
+    public function testConstructorMissingTimestamp() {
+        $this->expectExceptionMessageMatches("/^Required field 'timestamp' is missing$/");
+        new CWAQuicktestData( array(
+            'salt' => 'SALT'
+        ) );
+    }
+
+    public function testConstructorInvalidTimestamp() {
+        $this->expectExceptionMessageMatches("/^Invalid format for 'timestamp': This must be a unix timestamp$/");
+        new CWAQuicktestData( array(
+            'salt' => 'SALT',
+            'timestamp' => 'invalid'
+        ) );
+    }
+
+    public function testConstructorMissingPersonalData() {
+        $this->expectExceptionMessageMatches("/^Either all of the personal data fields have to be set, or none of them. Required personal data fields are: fn, ln, dob, testid$/");
+        new CWAQuicktestData( array(
+            'salt' => 'SALT',
+            'timestamp' => time(),
+            'fn' => 'Max'
+        ) );
+    }
+
     public function testGetHashAnonymous() {
         $testObject = new CWAQuicktestData( self::$dummyDataAnonymous );
         $this->assertEquals( $testObject->getHash(), '80232838046d2a65ab1b7a1be3dd1250ba9c91c969476c093bc34001ef460af8' );
