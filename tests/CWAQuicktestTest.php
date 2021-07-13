@@ -36,6 +36,11 @@ class CWAQuicktestTest extends \PHPUnit\Framework\TestCase
         $this->expectExceptionMessageMatches("/^The password provided for the key file is not valid$/");
         new CWAQuicktest( __DIR__ . '/data/test.cer', __DIR__ . '/data/test.key', 'xxx' );
     }
+    
+    public function testConstructorSkipPasstest() {
+        $this->assertInstanceOf( 'FortyeightDesign\\CWAQuicktest', new CWAQuicktest( __DIR__ . '/data/test.cer', __DIR__ . '/data/test.key', null, true ) );
+        $this->assertInstanceOf( 'FortyeightDesign\\CWAQuicktest', new CWAQuicktest( __DIR__ . '/data/test.cer', __DIR__ . '/data/test.key', 'xxx', true ) );
+    }
 
     public function testConstructorSucceeds() {
         $CWAQuicktest = self::getWorkingTestObject();

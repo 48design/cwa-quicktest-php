@@ -71,8 +71,9 @@ class CWAQuicktest {
      * @param string $certFile path to the .cer file you obtained from T-Systems
      * @param string $keyFile path to the .key file you generated for your certificate signing request to T-Systems
      * @param string $keyPass (optional) the passphrase needed to use the .key file, used when creating the certificate signing request
+     * @param bool $skipKeyPassTest (optional) whether to skip checking for key passphrase validity
      */
-    function __construct( $certFile, $keyFile, $keyPass = null) {
+    function __construct( $certFile, $keyFile, $keyPass = null, $skipKeyPassTest = false ) {
         $bt =  debug_backtrace();
 
         if ( !is_file( $certFile ) ) {
@@ -93,17 +94,19 @@ class CWAQuicktest {
             }
         }
 
-        // the $passphrase parameter was not nullable prior to PHP 8
-        $keyPassCheck = ( null === $keyPass
-                            ? openssl_pkey_get_private( file_get_contents( $keyFile ) )
-                            : openssl_pkey_get_private( file_get_contents( $keyFile ), $keyPass )
-                        );
+        if ( $skipKeyPassTest !== true ) {
+            // the $passphrase parameter was not nullable prior to PHP 8
+            $keyPassCheck = ( null === $keyPass
+                                ? openssl_pkey_get_private( file_get_contents( $keyFile ) )
+                                : openssl_pkey_get_private( file_get_contents( $keyFile ), $keyPass )
+                            );
 
-        if ( false === $keyPassCheck ) {
-            if ( empty( $keyPass ) ) {
-                throw new \Exception( "The specified key file requires a passphrase" );
-            } else {
-                throw new \Exception( "The password provided for the key file is not valid" );
+            if ( false === $keyPassCheck ) {
+                if ( empty( $keyPass ) ) {
+                    throw new \Exception( "The specified key file requires a passphrase" );
+                } else {
+                    throw new \Exception( "The password provided for the key file is not valid" );
+                }
             }
         }
 
