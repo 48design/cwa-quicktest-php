@@ -108,6 +108,10 @@ class CWAQuicktest {
                     throw new \Exception( "The password provided for the key file is not valid" );
                 }
             }
+
+            if ( ! openssl_x509_check_private_key( file_get_contents( $certFile ), $keyPassCheck ) ) {
+                throw new \Exception( "The specified certificate and key files do not match" );
+            }
         }
 
         self::$certFile = $certFile;
